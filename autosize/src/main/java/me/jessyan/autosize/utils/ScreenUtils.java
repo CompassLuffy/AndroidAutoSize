@@ -59,13 +59,26 @@ public class ScreenUtils {
     public static int[] getScreenSize(Context context) {
         int[] size = new int[2];
 
-        WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display d = w.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        d.getMetrics(metrics);
+//         WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//         Display d = w.getDefaultDisplay();
+//         DisplayMetrics metrics = new DisplayMetrics();
+//         d.getMetrics(metrics);
 
-        size[0] = metrics.widthPixels;
-        size[1] = metrics.heightPixels;
+//         size[0] = metrics.widthPixels;
+//         size[1] = metrics.heightPixels;
+        
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        final Display display = windowManager.getDefaultDisplay();
+        Point outPoint = new Point();
+        if (Build.VERSION.SDK_INT >= 19) {
+            // 可能有虚拟按键的情况
+            display.getRealSize(outPoint);
+        } else {
+            // 不可能有虚拟按键
+            display.getSize(outPoint);
+        }
+        size[0] = outPoint.x;
+        size[1] = outPoint.y;
         return size;
     }
 
